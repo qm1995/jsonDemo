@@ -21,7 +21,7 @@ public class BeanConverter implements Converter{
         if (value == null){
             return null;
         }
-        if ((value instanceof String) && "".equals(String.valueOf(value))){
+        if ((value instanceof String) && "".equals(String.valueOf(String.valueOf(value)))){
             return null;
         }
         try {

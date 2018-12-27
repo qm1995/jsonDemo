@@ -6,13 +6,15 @@ import com.google.gson.Gson;
 import java.lang.reflect.ParameterizedType;
 
 /**
+ * map转换器
  * @author: qiumin
- * @create: 2018-12-27 10:36
+ * @create: 2018-12-27 11:19
  **/
-public class CollectionConverter implements Converter{
+public class MapConverter implements Converter{
+
 
     /**
-     * 只支持json str 转 集合类型
+     * 只支持json转map
      * @param clazz
      * @param value
      * @return
@@ -20,10 +22,10 @@ public class CollectionConverter implements Converter{
     @Override
     public Object convert(Class<?> clazz, Object value) {
         if (clazz == null){
-            throw new RuntimeException("type must not null");
+            throw new RuntimeException("type must be not null");
         }else if (value == null){
             return null;
-        }else if (value instanceof String && "".equals(String.valueOf(String.valueOf(value)))){
+        }else if (value instanceof String && "".equals(String.valueOf(value))){
             return null;
         }
         Gson gson = new Gson();

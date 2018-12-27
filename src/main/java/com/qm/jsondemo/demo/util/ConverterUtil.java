@@ -19,13 +19,13 @@ public class ConverterUtil {
 
     private static final Map<Class<?>,Converter> DEFAULT_REGISTER_CONVERTER_MAP = new ConcurrentHashMap<>();
 
-
     static {
         DEFAULT_REGISTER_CONVERTER_MAP.put(Number.class,new NumberConverter());
         DEFAULT_REGISTER_CONVERTER_MAP.put(Boolean.class,new NumberConverter());
         DEFAULT_REGISTER_CONVERTER_MAP.put(String.class,new StringConverter());
         DEFAULT_REGISTER_CONVERTER_MAP.put(Object.class,new BeanConverter());
         DEFAULT_REGISTER_CONVERTER_MAP.put(Collection.class,new CollectionConverter());
+        DEFAULT_REGISTER_CONVERTER_MAP.put(Map.class,new MapConverter());
     }
 
 
@@ -41,6 +41,8 @@ public class ConverterUtil {
             converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Collection.class);
         }else if (isStringType(clazz)){
             converter = DEFAULT_REGISTER_CONVERTER_MAP.get(String.class);
+        }else if (isMapType(clazz)){
+            converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Map.class);
         }
         if (converter == null){
             throw new RuntimeException("unSupport the "+clazz.getName()+"type converter");
@@ -113,4 +115,17 @@ public class ConverterUtil {
         return false;
     }
 
+    public static boolean isMapType(Class<?> tClass){
+        if (tClass == null) {
+            return false;
+        }
+        try {
+            return tClass.newInstance() instanceof Map;
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
 }
