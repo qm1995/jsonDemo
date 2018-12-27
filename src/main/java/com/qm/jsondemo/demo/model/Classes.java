@@ -38,4 +38,13 @@ public class Classes {
     public void setStudentList(List<Student> studentList) {
         this.studentList = studentList;
     }
+
+    @Override
+    public String toString() {
+        return "Classes{" +
+                "cid=" + cid +
+                ", classesName='" + classesName + '\'' +
+                ", studentList=" + studentList +
+                '}';
+    }
 }

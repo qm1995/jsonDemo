@@ -1,6 +1,8 @@
 package com.qm.jsondemo.demo.util;
 
 
+import java.lang.reflect.Type;
+
 /**
  * 布尔类型
  * @author: qiumin
@@ -9,7 +11,7 @@ package com.qm.jsondemo.demo.util;
 public class BooleanConverter implements Converter{
 
     @Override
-    public Object convert(Class<?> clazz, Object value) {
+    public Object convert(Type clazz, Object value) {
         if (value == null){
             return null;
         }

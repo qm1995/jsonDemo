@@ -2,6 +2,7 @@ package com.qm.jsondemo.demo;
 
 import com.qm.jsondemo.demo.filter.RequestJsonFilter;
 import com.qm.jsondemo.demo.handler.RequestJsonHandler;
+import org.apache.catalina.filters.RequestFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -12,6 +13,7 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import javax.servlet.Filter;
 import java.util.List;
 
 /**
@@ -46,5 +48,10 @@ public class WebConfigure implements WebMvcConfigurer {
         //过滤器顺序,需排在第一位
         registration.setOrder(1);
         return registration;
+    }
+
+    @Bean(name = "requestJsonFilter")
+    public Filter requestFilter(){
+        return new RequestJsonFilter();
     }
 }

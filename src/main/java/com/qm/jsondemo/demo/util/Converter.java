@@ -1,5 +1,7 @@
 package com.qm.jsondemo.demo.util;
 
+import java.lang.reflect.Type;
+
 /**
  * 类型转换接口
  * @author qiumin
@@ -14,5 +16,5 @@ public interface Converter {
      * @param value
      * @return
      */
-    Object convert(Class<?> clazz,Object value);
+    Object convert(Type clazz, Object value);
 }

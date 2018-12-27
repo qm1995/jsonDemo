@@ -17,15 +17,15 @@ import java.util.concurrent.ConcurrentHashMap;
  **/
 public class ConverterUtil {
 
-    private static final Map<Class<?>,Converter> DEFAULT_REGISTER_CONVERTER_MAP = new ConcurrentHashMap<>();
+    private static final Map<Class<?>, Converter> DEFAULT_REGISTER_CONVERTER_MAP = new ConcurrentHashMap<>();
 
     static {
-        DEFAULT_REGISTER_CONVERTER_MAP.put(Number.class,new NumberConverter());
-        DEFAULT_REGISTER_CONVERTER_MAP.put(Boolean.class,new NumberConverter());
-        DEFAULT_REGISTER_CONVERTER_MAP.put(String.class,new StringConverter());
-        DEFAULT_REGISTER_CONVERTER_MAP.put(Object.class,new BeanConverter());
-        DEFAULT_REGISTER_CONVERTER_MAP.put(Collection.class,new CollectionConverter());
-        DEFAULT_REGISTER_CONVERTER_MAP.put(Map.class,new MapConverter());
+        DEFAULT_REGISTER_CONVERTER_MAP.put(Number.class, new NumberConverter());
+        DEFAULT_REGISTER_CONVERTER_MAP.put(Boolean.class, new NumberConverter());
+        DEFAULT_REGISTER_CONVERTER_MAP.put(String.class, new StringConverter());
+        DEFAULT_REGISTER_CONVERTER_MAP.put(Object.class, new BeanConverter());
+        DEFAULT_REGISTER_CONVERTER_MAP.put(Collection.class, new CollectionConverter());
+        DEFAULT_REGISTER_CONVERTER_MAP.put(Map.class, new MapConverter());
     }
 
 
@@ -33,19 +33,19 @@ public class ConverterUtil {
         Converter converter = null;
         if (isNumberType(clazz)) {
             converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Number.class);
-        }else if (isBooleanType(clazz)){
+        } else if (isBooleanType(clazz)) {
             converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Boolean.class);
-        }else if (isBeanType(clazz)){
+        } else if (isBeanType(clazz)) {
             converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Object.class);
-        }else if (isCollectionType(clazz)){
+        } else if (isCollectionType(clazz)) {
             converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Collection.class);
-        }else if (isStringType(clazz)){
+        } else if (isStringType(clazz)) {
             converter = DEFAULT_REGISTER_CONVERTER_MAP.get(String.class);
-        }else if (isMapType(clazz)){
+        } else if (isMapType(clazz)) {
             converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Map.class);
         }
-        if (converter == null){
-            throw new RuntimeException("unSupport the "+clazz.getName()+"type converter");
+        if (converter == null) {
+            throw new RuntimeException("unSupport the " + clazz.getName() + " type converter");
         }
         return converter;
     }
@@ -60,7 +60,7 @@ public class ConverterUtil {
         if (tClass.isPrimitive()) {
             return true;
         }
-        return tClass.getGenericSuperclass() == Number.class;
+        return Number.class.isAssignableFrom(tClass);
     }
 
     public static boolean isBooleanType(Class<?> tClass) {
@@ -77,55 +77,42 @@ public class ConverterUtil {
         return false;
     }
 
-    public static boolean isCollectionType(Class<?> tClass){
+    public static boolean isCollectionType(Class<?> tClass) {
         if (tClass == null) {
             return false;
         }
-        try {
-            return tClass.newInstance() instanceof Collection;
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return false;
+        return Collection.class.isAssignableFrom(tClass);
     }
 
     /**
      * 简单的判断 是否为普通javabean ，即是否还有 setter方法
+     *
      * @param tClass
      * @return
      */
-    public static boolean isBeanType(Class<?> tClass){
-        if (tClass == null){
+    public static boolean isBeanType(Class<?> tClass) {
+        if (tClass == null) {
             return false;
         }
         if (tClass.isArray() || tClass.isInterface() ||
                 Modifier.isAbstract(tClass.getModifiers()) || tClass.isEnum() ||
-                tClass.isAnnotation() || tClass.isPrimitive()){
+                tClass.isAnnotation() || tClass.isPrimitive()) {
             return false;
         }
         Method[] methods = tClass.getMethods();
-        for (Method method : methods){
+        for (Method method : methods) {
             String name = method.getName();
-            if (method.getParameterCount() == 1 && name.startsWith("set")){
+            if (method.getParameterCount() == 1 && name.startsWith("set")) {
                 return true;
             }
         }
         return false;
     }
 
-    public static boolean isMapType(Class<?> tClass){
+    public static boolean isMapType(Class<?> tClass) {
         if (tClass == null) {
             return false;
         }
-        try {
-            return tClass.newInstance() instanceof Map;
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-        return false;
+       return Map.class.isAssignableFrom(tClass);
     }
 }

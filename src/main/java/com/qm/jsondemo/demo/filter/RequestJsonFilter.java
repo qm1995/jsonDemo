@@ -1,5 +1,7 @@
 package com.qm.jsondemo.demo.filter;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.qm.jsondemo.demo.util.Constant;
 import com.qm.jsondemo.demo.util.JsonUtil;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -8,6 +10,9 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /** 过滤器
@@ -22,7 +27,7 @@ public class RequestJsonFilter implements Filter {
      * 用来对request中的Body数据进一步包装
      * @param req
      * @param response
-     * @param filterChain
+     * @param chain
      * @throws IOException
      * @throws ServletException
      */
@@ -47,8 +52,17 @@ public class RequestJsonFilter implements Filter {
                 sb.append(line);
             }
             String parameterValues = sb.toString();
-            Map<String, String> map = JsonUtil.convertStrToBean(Map.class,parameterValues);
-            request.setAttribute(Constant.REQUEST_BODY_DATA_NAME, map);
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(parameterValues);
+            if (element.isJsonArray()){
+                List<Map<String,String>> list = new ArrayList<>();
+                list = JsonUtil.convertStrToBean(list.getClass(),parameterValues);
+                request.setAttribute(Constant.REQUEST_BODY_DATA_NAME, list);
+            }else {
+                Map<String, String> map = new HashMap<>();
+                map = JsonUtil.convertStrToBean(map.getClass(), parameterValues);
+                request.setAttribute(Constant.REQUEST_BODY_DATA_NAME, map);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }finally {

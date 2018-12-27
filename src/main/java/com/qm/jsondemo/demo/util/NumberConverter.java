@@ -1,5 +1,6 @@
 package com.qm.jsondemo.demo.util;
 
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -12,7 +13,12 @@ import java.math.BigInteger;
 public class NumberConverter implements Converter{
 
     @Override
-    public Object convert(Class<?> clazz,Object value){
+    public Object convert(Type type, Object value){
+        Class<?> clazz = null;
+        if (!(type instanceof Class)){
+            return null;
+        }
+        clazz = (Class<?>) type;
         if (clazz == null){
             throw new RuntimeException("类型不能为空");
         }else if (value == null){

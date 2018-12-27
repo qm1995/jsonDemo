@@ -1,5 +1,7 @@
 package com.qm.jsondemo.demo.model;
 
+import com.qm.jsondemo.demo.util.JsonUtil;
+
 /**
  * @author qiumin
  * @create 2018/12/24 18:20
@@ -18,5 +20,21 @@ public class Student {
 
     public void setSid(Integer sid) {
         this.sid = sid;
+    }
+
+    public String getStuName() {
+        return stuName;
+    }
+
+    public void setStuName(String stuName) {
+        this.stuName = stuName;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "sid=" + sid +
+                ", stuName='" + stuName + '\'' +
+                '}';
     }
 }

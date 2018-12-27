@@ -3,7 +3,7 @@ package com.qm.jsondemo.demo.util;
 
 import com.google.gson.Gson;
 
-import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 
 /**
  * map转换器
@@ -20,7 +20,7 @@ public class MapConverter implements Converter{
      * @return
      */
     @Override
-    public Object convert(Class<?> clazz, Object value) {
+    public Object convert(Type clazz, Object value) {
         if (clazz == null){
             throw new RuntimeException("type must be not null");
         }else if (value == null){
@@ -29,6 +29,6 @@ public class MapConverter implements Converter{
             return null;
         }
         Gson gson = new Gson();
-        return gson.fromJson(String.valueOf(value),((ParameterizedType) clazz.getGenericSuperclass()).getActualTypeArguments()[0]);
+        return gson.fromJson(String.valueOf(value),clazz);
     }
 }

@@ -1,6 +1,8 @@
 package com.qm.jsondemo.demo.util;
 
 
+import java.lang.reflect.Type;
+
 /**
  * String 类型转换器
  * @author: qiumin
@@ -8,7 +10,8 @@ package com.qm.jsondemo.demo.util;
  **/
 public class StringConverter implements Converter{
     @Override
-    public Object convert(Class<?> clazz, Object value) {
+    public Object convert(Type type, Object value) {
+        Class<?> clazz = (Class<?>) type;
         if (clazz == String.class || clazz == char.class || clazz == Character.class){
             return String.valueOf(value);
         }

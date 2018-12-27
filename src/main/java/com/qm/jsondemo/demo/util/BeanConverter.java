@@ -3,6 +3,8 @@ package com.qm.jsondemo.demo.util;
 
 import com.google.gson.Gson;
 
+import java.lang.reflect.Type;
+
 /**
  * 普通javabean
  * @author: qiumin
@@ -17,7 +19,7 @@ public class BeanConverter implements Converter{
      * @return
      */
     @Override
-    public Object convert(Class<?> clazz, Object value) {
+    public Object convert(Type clazz, Object value) {
         if (value == null){
             return null;
         }
