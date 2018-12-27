@@ -17,7 +17,9 @@ public class NumberConverter implements Converter{
             throw new RuntimeException("类型不能为空");
         }else if (value == null){
             return null;
-        }else if (clazz.getGenericSuperclass() != Number.class){
+        }else if (value instanceof String && "".equals(String.valueOf(value))){
+            return null;
+        }else if (!clazz.isPrimitive() && clazz.getGenericSuperclass() != Number.class){
             throw new ClassCastException(clazz.getTypeName() + "can not cast Number type!");
         }
         if (clazz == int.class || clazz == Integer.class){

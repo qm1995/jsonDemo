@@ -1,6 +1,7 @@
 package com.qm.jsondemo.demo.handler;
 
 import com.qm.jsondemo.demo.util.Constant;
+import com.qm.jsondemo.demo.util.ConverterUtil;
 import com.qm.jsondemo.demo.util.JsonUtil;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -29,15 +30,16 @@ public class RequestJsonHandler implements HandlerMethodArgumentResolver {
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
         HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
         Map<String,String> map = (Map<String, String>) request.getAttribute(Constant.REQUEST_BODY_DATA_NAME);
-        if (map == null){
-
+        if (map == null || map.size() == 0){
+            return null;
         }
         RequestJson requestJson = methodParameter.getMethodAnnotation(RequestJson.class);
         String fieldName = requestJson.fieldName();
         if ("".equals(fieldName)){
             fieldName = methodParameter.getParameterName();
         }
+        String orDefault = map.getOrDefault(fieldName, requestJson.defaultValue());
         Class<?> parameterType = methodParameter.getParameterType();
-        return JsonUtil.convertStrToBean(parameterType,map.get(fieldName));
+        return ConverterUtil.getConverter(parameterType).convert(parameterType,orDefault);
     }
 }
