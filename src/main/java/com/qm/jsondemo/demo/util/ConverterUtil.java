@@ -2,11 +2,16 @@ package com.qm.jsondemo.demo.util;
 
 import jdk.nashorn.internal.ir.IfNode;
 
+import java.beans.IntrospectionException;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * 类型转换工具类
@@ -26,9 +31,14 @@ public class ConverterUtil {
         DEFAULT_REGISTER_CONVERTER_MAP.put(Object.class, new BeanConverter());
         DEFAULT_REGISTER_CONVERTER_MAP.put(Collection.class, new CollectionConverter());
         DEFAULT_REGISTER_CONVERTER_MAP.put(Map.class, new MapConverter());
+        DEFAULT_REGISTER_CONVERTER_MAP.put(Date.class, new DateConverter());
     }
 
-
+    /**
+     * 根据clazz获取合适的转换器
+     * @param clazz
+     * @return
+     */
     public static Converter getConverter(Class<?> clazz) {
         Converter converter = null;
         if (isNumberType(clazz)) {
@@ -43,6 +53,8 @@ public class ConverterUtil {
             converter = DEFAULT_REGISTER_CONVERTER_MAP.get(String.class);
         } else if (isMapType(clazz)) {
             converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Map.class);
+        } else if (isDateType(clazz)){
+            converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Date.class);
         }
         if (converter == null) {
             throw new RuntimeException("unSupport the " + clazz.getName() + " type converter");
@@ -50,6 +62,11 @@ public class ConverterUtil {
         return converter;
     }
 
+    /**
+     * 是否为数值类型
+     * @param tClass
+     * @return
+     */
     public static boolean isNumberType(Class<?> tClass) {
         if (tClass == null) {
             return false;
@@ -63,6 +80,11 @@ public class ConverterUtil {
         return Number.class.isAssignableFrom(tClass);
     }
 
+    /**
+     * 是否为boolean类型
+     * @param tClass
+     * @return
+     */
     public static boolean isBooleanType(Class<?> tClass) {
         if (tClass == boolean.class || tClass == Boolean.class) {
             return true;
@@ -70,6 +92,11 @@ public class ConverterUtil {
         return false;
     }
 
+    /**
+     * 是否为string 类型
+     * @param tClass
+     * @return
+     */
     public static boolean isStringType(Class<?> tClass) {
         if (tClass == char.class || tClass == String.class || tClass == Character.class) {
             return true;
@@ -77,6 +104,11 @@ public class ConverterUtil {
         return false;
     }
 
+    /**
+     * 是否为集合类型
+     * @param tClass
+     * @return
+     */
     public static boolean isCollectionType(Class<?> tClass) {
         if (tClass == null) {
             return false;
@@ -85,7 +117,7 @@ public class ConverterUtil {
     }
 
     /**
-     * 简单的判断 是否为普通javabean ，即是否还有 setter方法
+     * 简单的判断 是否为普通javabean ，即该类中字段是否含有 getter/setter方法
      *
      * @param tClass
      * @return
@@ -96,23 +128,45 @@ public class ConverterUtil {
         }
         if (tClass.isArray() || tClass.isInterface() ||
                 Modifier.isAbstract(tClass.getModifiers()) || tClass.isEnum() ||
-                tClass.isAnnotation() || tClass.isPrimitive()) {
+                tClass.isAnnotation() || tClass.isPrimitive() || Date.class.isAssignableFrom(tClass)) {
             return false;
         }
-        Method[] methods = tClass.getMethods();
-        for (Method method : methods) {
-            String name = method.getName();
-            if (method.getParameterCount() == 1 && name.startsWith("set")) {
-                return true;
+        Field[] declaredFields = tClass.getDeclaredFields();
+        for (Field field : declaredFields) {
+            try {
+                PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(),tClass);
+                if (descriptor.getWriteMethod() != null && descriptor.getReadMethod() != null){
+                    return true;
+                }
+            } catch (IntrospectionException e) {
+                // ignore
             }
         }
         return false;
     }
 
+    /**
+     * 是否为Map接口的实现类/子接口
+     * @param tClass
+     * @return
+     */
     public static boolean isMapType(Class<?> tClass) {
         if (tClass == null) {
             return false;
         }
        return Map.class.isAssignableFrom(tClass);
+    }
+
+
+    /**
+     * 是否为日期类型
+     * @param tClass
+     * @return
+     */
+    public static boolean isDateType(Class<?> tClass){
+        if (tClass == null){
+            return false;
+        }
+        return Date.class.isAssignableFrom(tClass);
     }
 }

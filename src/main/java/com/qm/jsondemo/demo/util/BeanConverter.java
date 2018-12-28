@@ -30,7 +30,7 @@ public class BeanConverter implements Converter{
             Gson gson = new Gson();
             return gson.fromJson(String.valueOf(value), clazz);
         }catch (Exception e){
-            throw new ClassCastException(clazz.getTypeName() + "can not cast Bean type!");
+            throw new ClassCastException(clazz.getTypeName() + " can not cast Bean type!");
         }
     }
 }

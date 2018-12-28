@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -89,13 +91,24 @@ public class JsonController {
 
 
     /**
-     * 请求路径 http://127.0.0.1:8080/test5   提交类型为application/json
+     * 请求路径 http://127.0.0.1:8080/test6   提交类型为application/json
      * 测试参数：[{"cid":1,"classesName":"一班","studentList":[{"sid":1,"stuName":"张三"},{"sid":2,"stuName":"李四"}]},{"cid":2,"classesName":"二班","studentList":[{"sid":1,"stuName":"张三2"},{"sid":2,"stuName":"李四2"}]}]
      * @param classes
      */
     @RequestMapping(value = "/test6",method = RequestMethod.POST)
     public void testJsonStr6(@RequestJson List<Classes> classes){
         System.out.println(classes);
+
+    }
+
+    /**
+     * 请求路径 http://127.0.0.1:8080/test7   提交类型为application/json
+     * 测试参数：{"time":"2018-12-22 10:56:12"}
+     * @param time
+     */
+    @RequestMapping(value = "/test7",method = RequestMethod.POST)
+    public void testJsonStr7(@RequestJson Date time){
+        System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time));
 
     }
 }

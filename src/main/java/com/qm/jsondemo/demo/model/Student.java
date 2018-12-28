@@ -13,6 +13,7 @@ public class Student {
 
     private String stuName;
 
+    private boolean exist;
 
     public Integer getSid() {
         return sid;
@@ -28,6 +29,14 @@ public class Student {
 
     public void setStuName(String stuName) {
         this.stuName = stuName;
+    }
+
+    public boolean isExist() {
+        return exist;
+    }
+
+    public void setExist(boolean exist) {
+        this.exist = exist;
     }
 
     @Override
