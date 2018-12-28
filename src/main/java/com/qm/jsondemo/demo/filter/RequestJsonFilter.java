@@ -36,45 +36,8 @@ public class RequestJsonFilter implements Filter {
         ServletRequest requestWrapper = null;
         if(req instanceof HttpServletRequest) {
             HttpServletRequest request = (HttpServletRequest) req;
-            resolveRequestBody(request);
             requestWrapper = new ContentCachingRequestWrapper(request);
         }
         chain.doFilter(requestWrapper == null ? req : requestWrapper, response);
     }
-
-    private void resolveRequestBody(HttpServletRequest request){
-        BufferedReader reader = null;
-        try {
-            reader = request.getReader();
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
-            String parameterValues = sb.toString();
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(parameterValues);
-            if (element.isJsonArray()){
-                List<Map<String,String>> list = new ArrayList<>();
-                list = JsonUtil.convertStrToBean(list.getClass(),parameterValues);
-                request.setAttribute(Constant.REQUEST_BODY_DATA_NAME, list);
-            }else {
-                Map<String, String> map = new HashMap<>();
-                map = JsonUtil.convertStrToBean(map.getClass(), parameterValues);
-                request.setAttribute(Constant.REQUEST_BODY_DATA_NAME, map);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            if (reader != null){
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    // ignore
-                    //e.printStackTrace();
-                }
-            }
-        }
-    }
-
 }

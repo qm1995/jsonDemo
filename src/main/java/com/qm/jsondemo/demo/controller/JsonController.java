@@ -29,7 +29,7 @@ public class JsonController {
      * @param str
      */
     @RequestMapping(value = "/test",method = RequestMethod.POST)
-    public void testJsonStr(@RequestBody String str){
+    public void testJsonStr(@RequestBody(required = false) String str){
         System.out.println(str);
     }
 
@@ -73,7 +73,7 @@ public class JsonController {
      * @param students
      */
     @RequestMapping(value = "/test4",method = RequestMethod.POST)
-    public void testJsonStr4(@RequestJson List<Student> students){
+    public void testJsonStr4(@RequestBody List<Student> students){
         Student student = students.get(0);
         System.out.println(student);
     }

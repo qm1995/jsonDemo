@@ -1,5 +1,7 @@
 package com.qm.jsondemo.demo.handler;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import com.qm.jsondemo.demo.util.Constant;
 import com.qm.jsondemo.demo.util.ConverterUtil;
 import com.qm.jsondemo.demo.util.JsonUtil;
@@ -10,7 +12,12 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +29,12 @@ import java.util.Map;
 @Component
 public class RequestJsonHandler implements HandlerMethodArgumentResolver {
 
+    /**
+     * json类型
+     */
+    private static final String JSON_CONTENT_TYPE = "application/json";
+
+
     @Override
     public boolean supportsParameter(MethodParameter methodParameter) {
         return methodParameter.hasParameterAnnotation(RequestJson.class);
@@ -29,7 +42,14 @@ public class RequestJsonHandler implements HandlerMethodArgumentResolver {
 
     @Override
     public Object resolveArgument(MethodParameter methodParameter, ModelAndViewContainer modelAndViewContainer, NativeWebRequest nativeWebRequest, WebDataBinderFactory webDataBinderFactory) throws Exception {
+
         HttpServletRequest request = nativeWebRequest.getNativeRequest(HttpServletRequest.class);
+        String contentType = request.getContentType();
+        // 不是json
+        if (!JSON_CONTENT_TYPE.equalsIgnoreCase(contentType)){
+            return null;
+        }
+        resolveRequestBody(request);
         Object obj =  request.getAttribute(Constant.REQUEST_BODY_DATA_NAME);
         if (obj == null){
             return null;
@@ -83,5 +103,44 @@ public class RequestJsonHandler implements HandlerMethodArgumentResolver {
             orDefault = map.getOrDefault(fieldName,requestJson.defaultValue());
         }
         return ConverterUtil.getConverter(parameterType).convert(methodParameter.getGenericParameterType(),orDefault);
+    }
+
+    /**
+     * 解析request中的body数据
+     * @param request
+     */
+    private void resolveRequestBody(ServletRequest request){
+        BufferedReader reader = null;
+        try {
+            reader = request.getReader();
+            StringBuilder sb = new StringBuilder();
+            String line = null;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            String parameterValues = sb.toString();
+            JsonParser parser = new JsonParser();
+            JsonElement element = parser.parse(parameterValues);
+            if (element.isJsonArray()){
+                List<Map<String,String>> list = new ArrayList<>();
+                list = JsonUtil.convertStrToBean(list.getClass(),parameterValues);
+                request.setAttribute(Constant.REQUEST_BODY_DATA_NAME, list);
+            }else {
+                Map<String, String> map = new HashMap<>();
+                map = JsonUtil.convertStrToBean(map.getClass(), parameterValues);
+                request.setAttribute(Constant.REQUEST_BODY_DATA_NAME, map);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }finally {
+            if (reader != null){
+                try {
+                    reader.close();
+                } catch (IOException e) {
+                    // ignore
+                    //e.printStackTrace();
+                }
+            }
+        }
     }
 }
