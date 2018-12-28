@@ -32,7 +32,7 @@ public class WebConfigure implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(requestJsonHandler);
+        resolvers.add(0,requestJsonHandler);
     }
 
     @Bean

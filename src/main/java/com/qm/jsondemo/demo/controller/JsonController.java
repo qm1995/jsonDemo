@@ -43,29 +43,59 @@ public class JsonController {
 
 
     /**
-     * 请求路径 http://127.0.0.1:8080/test2 提交类型为application/json
+     * 请求路径 http://127.0.0.1:8080/test2?sex=男 提交类型为application/json post
      * 测试参数{"name":"张三"}
      * @param name
      * @param age
      */
     @RequestMapping(value = "/test2",method = RequestMethod.POST)
-    public void testJsonStr2(@RequestJson String name,@RequestJson(defaultValue = "12") Integer age){
-        System.out.println("name="+name+",age="+age);
+    public void testJsonStr2(@RequestJson String name,@RequestJson(defaultValue = "12") Integer age,String sex){
+        System.out.println("name="+name+",age="+age+",sex="+sex);
+        // 打印结果 name=张三,age=12,sex=男
     }
 
     /**
      * 请求路径 http://127.0.0.1:8080/test3 提交类型为application/json
      * 测试参数{"sid":1,"stuName":"里斯"}
+     * 自定义的不会被拦截,map参数会被spring 自身的mapMethodProcess方法给拦截
      * @param students
      */
     @RequestMapping(value = "/test3",method = RequestMethod.POST)
-    public void testJsonStr1(@RequestJson Map<String,Object> students){
+    public void testJsonStr3(@RequestJson Map<String,Object> students){
         System.out.println(JsonUtil.convertBeanToStr(students));
     }
 
+    /**
+     * 请求路径 http://127.0.0.1:8080/test4 提交类型为application/json
+     * 测试参数：[{"sid":1,"stuName":"里斯"},{"sid":2,"stuName":"里斯222"}]
+     * @param students
+     */
     @RequestMapping(value = "/test4",method = RequestMethod.POST)
-    public void testJsonStr1(@RequestJson(elementType = Student.class) List<Student> students){
+    public void testJsonStr4(@RequestJson List<Student> students){
         Student student = students.get(0);
         System.out.println(student);
+    }
+
+    /**
+     * 请求路径 http://127.0.0.1:8080/test5   提交类型为application/json
+     * 测试参数：{"cid":2,"classesName":"一班","studentList":[{"sid":1,"stuName":"张三"},{"sid":1,"stuName":"李四"},{"sid":3,"stuName":"王五"}]}
+     * @param classes
+     */
+    @RequestMapping(value = "/test5",method = RequestMethod.POST)
+    public void testJsonStr5(@RequestJson Classes classes){
+        System.out.println(classes);
+
+    }
+
+
+    /**
+     * 请求路径 http://127.0.0.1:8080/test5   提交类型为application/json
+     * 测试参数：[{"cid":1,"classesName":"一班","studentList":[{"sid":1,"stuName":"张三"},{"sid":2,"stuName":"李四"}]},{"cid":2,"classesName":"二班","studentList":[{"sid":1,"stuName":"张三2"},{"sid":2,"stuName":"李四2"}]}]
+     * @param classes
+     */
+    @RequestMapping(value = "/test6",method = RequestMethod.POST)
+    public void testJsonStr6(@RequestJson List<Classes> classes){
+        System.out.println(classes);
+
     }
 }

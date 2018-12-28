@@ -1,7 +1,5 @@
 package com.qm.jsondemo.demo.handler;
 
-import com.google.gson.reflect.TypeToken;
-import com.qm.jsondemo.demo.model.Student;
 import com.qm.jsondemo.demo.util.Constant;
 import com.qm.jsondemo.demo.util.ConverterUtil;
 import com.qm.jsondemo.demo.util.JsonUtil;
@@ -12,10 +10,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import javax.rmi.CORBA.Stub;
 import javax.servlet.http.HttpServletRequest;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -62,9 +57,7 @@ public class RequestJsonHandler implements HandlerMethodArgumentResolver {
      */
     private Object dealWithArray(List<Map<String,String>> list,RequestJson requestJson,MethodParameter methodParameter){
         Class<?> parameterType = methodParameter.getParameterType();
-
-        TypeToken<?> typeToken = TypeToken.getParameterized(parameterType, requestJson.elementType());
-        return ConverterUtil.getConverter(parameterType).convert(typeToken.getType(),JsonUtil.convertBeanToStr(list));
+        return ConverterUtil.getConverter(parameterType).convert(methodParameter.getGenericParameterType(),JsonUtil.convertBeanToStr(list));
     }
     /**
      * 处理{"":""}第一层json结构为map结构的json串，
@@ -89,6 +82,6 @@ public class RequestJsonHandler implements HandlerMethodArgumentResolver {
         }else {
             orDefault = map.getOrDefault(fieldName,requestJson.defaultValue());
         }
-        return ConverterUtil.getConverter(parameterType).convert(parameterType,orDefault);
+        return ConverterUtil.getConverter(parameterType).convert(methodParameter.getGenericParameterType(),orDefault);
     }
 }

@@ -10,6 +10,7 @@ import java.lang.reflect.Type;
  * @author: qiumin
  * @create: 2018-12-27 11:19
  **/
+@Deprecated
 public class MapConverter implements Converter{
 
 

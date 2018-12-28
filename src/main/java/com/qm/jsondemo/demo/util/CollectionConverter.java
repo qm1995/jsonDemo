@@ -3,7 +3,6 @@ package com.qm.jsondemo.demo.util;
 
 import com.google.gson.Gson;
 
-import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
 /**
@@ -21,7 +20,7 @@ public class CollectionConverter implements Converter{
     @Override
     public Object convert(Type clazz, Object value) {
         if (clazz == null){
-            throw new RuntimeException("type must not null");
+            throw new RuntimeException("type must be not null");
         }else if (value == null){
             return null;
         }else if (value instanceof String && "".equals(String.valueOf(String.valueOf(value)))){
