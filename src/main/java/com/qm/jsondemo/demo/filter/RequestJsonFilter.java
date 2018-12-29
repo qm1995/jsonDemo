@@ -38,9 +38,9 @@ public class RequestJsonFilter implements Filter {
             HttpServletRequest request = (HttpServletRequest) req;
             /**
              * 只是为了防止一次请求中调用getReader(),getInputStream(),getParameter(),报错
-             * 由于inputStream 流没实现cloneable接口，所以并不具有重用功能，及多次读取同一个inputStream流，
-             * 只有第一次读取时才有数据，后面再次读取inputStream 没有数据
-             * 即，getReader()，只能调用一次，但getParameter()可以调用多次，详情可见ContentCachingRequestWrapper()源码
+             * 都清楚inputStream 并不具有重用功能，即多次读取同一个inputStream流，
+             * 只有第一次读取时才有数据，后面再次读取inputStream 没有数据，
+             * 即，getReader()，只能调用一次，但getParameter()可以调用多次，详情可见ContentCachingRequestWrapper源码
               */
             requestWrapper = new ContentCachingRequestWrapper(request);
         }
