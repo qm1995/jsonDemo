@@ -43,46 +43,7 @@ public class RequestJsonFilter implements Filter {
              * 即，getReader()，只能调用一次，但getParameter()可以调用多次，详情可见ContentCachingRequestWrapper()源码
               */
             requestWrapper = new ContentCachingRequestWrapper(request);
-            resolveRequestBody(request);
         }
         chain.doFilter(requestWrapper == null ? req : requestWrapper, response);
-    }
-    /**
-     * 解析request中的body数据
-     * @param request
-     */
-    private void resolveRequestBody(ServletRequest request){
-        BufferedReader reader = null;
-        try {
-            reader = request.getReader();
-            StringBuilder sb = new StringBuilder();
-            String line = null;
-            while ((line = reader.readLine()) != null) {
-                sb.append(line);
-            }
-            String parameterValues = sb.toString();
-            JsonParser parser = new JsonParser();
-            JsonElement element = parser.parse(parameterValues);
-            if (element.isJsonArray()){
-                List<Map<String,String>> list = new ArrayList<>();
-                list = JsonUtil.convertStrToBean(list.getClass(),parameterValues);
-                request.setAttribute(Constant.REQUEST_BODY_DATA_NAME, list);
-            }else {
-                Map<String, String> map = new HashMap<>();
-                map = JsonUtil.convertStrToBean(map.getClass(), parameterValues);
-                request.setAttribute(Constant.REQUEST_BODY_DATA_NAME, map);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }finally {
-            if (reader != null){
-                try {
-                    reader.close();
-                } catch (IOException e) {
-                    // ignore
-                    //e.printStackTrace();
-                }
-            }
-        }
     }
 }
