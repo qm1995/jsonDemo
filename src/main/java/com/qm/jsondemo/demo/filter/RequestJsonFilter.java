@@ -1,24 +1,13 @@
 package com.qm.jsondemo.demo.filter;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
-import com.qm.jsondemo.demo.util.Constant;
-import com.qm.jsondemo.demo.util.JsonUtil;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /** 过滤器
  * @author qiumin
- * @create 2018/12/24 18:30
- * @desc
  **/
 public class RequestJsonFilter implements Filter {
 

@@ -23,8 +23,6 @@ import java.util.Map;
 
 /**
  * @author qiumin
- * @create 2018/12/24 18:26
- * @desc
  **/
 @Component
 public class RequestJsonHandler implements HandlerMethodArgumentResolver {

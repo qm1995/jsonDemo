@@ -6,8 +6,6 @@ import java.lang.reflect.ParameterizedType;
 
 /**
  * @author qiumin
- * @create 2018/12/24 18:33
- * @desc
  **/
 public class JsonUtil {
 

@@ -4,7 +4,6 @@ import com.qm.jsondemo.demo.util.JsonUtil;
 
 /**
  * @author qiumin
- * @create 2018/12/24 18:20
  * @desc
  **/
 public class Student {

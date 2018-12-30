@@ -18,8 +18,6 @@ import java.util.List;
 
 /**
  * @author qiumin
- * @create 2018/12/25 18:20
- * @desc
  **/
 @Configuration
 @EnableWebMvc

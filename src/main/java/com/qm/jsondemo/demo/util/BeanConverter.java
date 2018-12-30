@@ -8,7 +8,6 @@ import java.lang.reflect.Type;
 /**
  * 普通javabean
  * @author: qiumin
- * @create: 2018-12-27 10:31
  **/
 public class BeanConverter implements Converter{
 

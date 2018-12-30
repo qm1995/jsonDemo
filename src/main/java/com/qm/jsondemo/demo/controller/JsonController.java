@@ -16,8 +16,6 @@ import java.util.Map;
 
 /**
  * @author qiumin
- * @create 2018/12/24 18:23
- * @desc
  **/
 @RestController
 public class JsonController {
@@ -30,6 +28,15 @@ public class JsonController {
      */
     @RequestMapping(value = "/test",method = RequestMethod.POST)
     public void testJsonStr(@RequestBody(required = false) String str){
+        System.out.println(str);
+    }
+    /**
+     * 请求路径 http://127.0.0.1:8080/testAcceptOrdinaryParam?str=123
+     * 测试参数
+     * @param str
+     */
+    @RequestMapping(value = "/testAcceptOrdinaryParam",method = {RequestMethod.GET,RequestMethod.POST})
+    public void testAcceptOrdinaryParam(String str){
         System.out.println(str);
     }
 
@@ -109,6 +116,17 @@ public class JsonController {
     @RequestMapping(value = "/test7",method = RequestMethod.POST)
     public void testJsonStr7(@RequestJson Date time){
         System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time));
-
     }
+
+
+    /*
+     * 前端传Json参数 {"name":"张三"}
+     * 请求路径 http://127.0.0.1:8080/XXX?sex=男 提交方式post
+     * 后端使用
+     *     public String testAcceptJsonParam(@RequestJson String name,@RequestJson(defaultValue="12") Integer age,String sex)
+     *
+     * 后端需打印正确结果  即name=张三，age=12,sex=男
+     *
+     * */
+
 }

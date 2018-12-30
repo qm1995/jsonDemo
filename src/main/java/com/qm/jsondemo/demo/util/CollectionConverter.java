@@ -7,7 +7,6 @@ import java.lang.reflect.Type;
 
 /**
  * @author: qiumin
- * @create: 2018-12-27 10:36
  **/
 public class CollectionConverter implements Converter{
 

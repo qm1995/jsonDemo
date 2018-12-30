@@ -3,7 +3,6 @@ package com.qm.jsondemo.demo.util;
 /**
  * 常量类
  * @author qiumin
- * @create 2018/12/25 18:09
  * @desc
  **/
 public class Constant {

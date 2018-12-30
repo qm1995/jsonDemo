@@ -11,8 +11,6 @@ import java.lang.annotation.Target;
  * error:
  *     test1(@RequestJson Integer age,@RequestBody String name), 这是错误的，
  * @author qiumin
- * @create 2018/12/24 18:27
- * @desc
  **/
 @Target(ElementType.PARAMETER)
 @Retention(RetentionPolicy.RUNTIME)

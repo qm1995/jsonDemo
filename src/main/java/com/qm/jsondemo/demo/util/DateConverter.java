@@ -9,9 +9,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 日期转换器
- * 对于日期校验，这里只是简单的做了一下，实际上还有对闰年的校验，每个月份的天数的校验
+ * 对于日期校验，这里只是简单的做了一下，实际上还有对闰年的校验，
+ * 每个月份的天数的校验及其他日期格式的校验
  * @author: qiumin
- * @create: 2018-12-28 10:43
+ * @create: 2018-12-30 10:43
  **/
 public class DateConverter implements Converter{
 
@@ -70,6 +71,11 @@ public class DateConverter implements Converter{
         }
     }
 
+    /**
+     * 获取对应的日期字符串格式
+     * @param value
+     * @return
+     */
     private String getDateStrPattern(String value){
         for (Map.Entry<String,String> m : PATTERN_MAP.entrySet()){
             if (value.matches(m.getKey())){
