@@ -14,7 +14,7 @@
 * 支持普通参数名解析，即八种基本类型及包装类型，日期类型
 * 支持JavaBean 接收参数
 
-####项目结构  
+#### 项目结构  
 >核心类
 * RequestJsonFilter  
 * RequestJsonHandler  
@@ -26,5 +26,7 @@
 >辅助测试类  
 * 两个model类 student 和classes  
 * 一个JsonController  
+博客地址  
+https://www.cnblogs.com/qm-article/p/10199622.html
 
 
