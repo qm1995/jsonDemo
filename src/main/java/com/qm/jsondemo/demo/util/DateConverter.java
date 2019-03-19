@@ -47,6 +47,8 @@ public class DateConverter implements Converter{
      */
     private static final Map<String,String> PATTERN_MAP = new ConcurrentHashMap<>();
 
+    private String datePattern;
+
     static {
         PATTERN_MAP.put(REGEX_DATE,"yyyy-MM-dd");
         PATTERN_MAP.put(REGEX_DATE_TIME,"yyyy-MM-dd HH:mm:ss");
@@ -82,6 +84,14 @@ public class DateConverter implements Converter{
                 return m.getValue();
             }
         }
-        return DEFAULT_PATTERN;
+        return datePattern == null ? DEFAULT_PATTERN : datePattern;
+    }
+
+    public String getDatePattern() {
+        return datePattern;
+    }
+
+    public void setDatePattern(String datePattern) {
+        this.datePattern = datePattern;
     }
 }

@@ -27,4 +27,11 @@ public @interface RequestJson {
      * @return
      */
     String defaultValue() default "";
+
+    /**
+     *  前端传的日期格式
+     *  只有日期类型才有用
+     * @return
+     */
+    String datePattern() default "";
 }

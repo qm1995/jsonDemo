@@ -2,9 +2,7 @@ package com.qm.jsondemo.demo.handler;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.qm.jsondemo.demo.util.Constant;
-import com.qm.jsondemo.demo.util.ConverterUtil;
-import com.qm.jsondemo.demo.util.JsonUtil;
+import com.qm.jsondemo.demo.util.*;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.support.WebDataBinderFactory;
@@ -16,10 +14,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author qiumin
@@ -105,7 +100,12 @@ public class RequestJsonHandler implements HandlerMethodArgumentResolver {
         }else {
             orDefault = map.getOrDefault(fieldName,requestJson.defaultValue());
         }
-        return ConverterUtil.getConverter(parameterType).convert(methodParameter.getGenericParameterType(),orDefault);
+        Converter converter = ConverterUtil.getConverter(parameterType);
+        if (converter instanceof DateConverter && !"".equals(requestJson.datePattern())){
+            DateConverter dateConverter = (DateConverter) converter;
+            dateConverter.setDatePattern(requestJson.datePattern());
+        }
+        return converter.convert(methodParameter.getGenericParameterType(),orDefault);
     }
 
     /**

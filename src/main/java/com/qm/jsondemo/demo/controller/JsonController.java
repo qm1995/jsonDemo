@@ -114,7 +114,7 @@ public class JsonController {
      * @param time
      */
     @RequestMapping(value = "/test7",method = RequestMethod.POST)
-    public void testJsonStr7(@RequestJson Date time){
+    public void testJsonStr7(@RequestJson(datePattern = "yyyy:MM:dd") Date time){
         System.out.println(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(time));
     }
 
