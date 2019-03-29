@@ -31,4 +31,9 @@ public class MapConverter implements Converter{
         Gson gson = new Gson();
         return gson.fromJson(String.valueOf(value),clazz);
     }
+
+    @Override
+    public boolean support(Class<?> clazz) {
+        return ConverterUtil.isMapType(clazz);
+    }
 }

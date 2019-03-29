@@ -48,5 +48,10 @@ public class NumberConverter implements Converter{
         }
     }
 
+    @Override
+    public boolean support(Class<?> clazz) {
+        return ConverterUtil.isNumberType(clazz);
+    }
+
 
 }

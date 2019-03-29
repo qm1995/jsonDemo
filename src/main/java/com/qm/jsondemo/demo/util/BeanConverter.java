@@ -32,4 +32,9 @@ public class BeanConverter implements Converter{
             throw new ClassCastException(clazz.getTypeName() + " can not cast Bean type!");
         }
     }
+
+    @Override
+    public boolean support(Class<?> clazz) {
+        return ConverterUtil.isBeanType(clazz);
+    }
 }

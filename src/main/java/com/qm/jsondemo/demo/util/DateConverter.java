@@ -73,6 +73,11 @@ public class DateConverter implements Converter{
         }
     }
 
+    @Override
+    public boolean support(Class<?> clazz) {
+        return ConverterUtil.isDateType(clazz);
+    }
+
     /**
      * 获取对应的日期字符串格式
      * @param value

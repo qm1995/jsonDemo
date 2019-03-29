@@ -22,4 +22,9 @@ public class BooleanConverter implements Converter{
         }
         throw new ClassCastException(clazz.getTypeName() + "can not cast Boolean type!");
     }
+
+    @Override
+    public boolean support(Class<?> clazz) {
+        return ConverterUtil.isBooleanType(clazz);
+    }
 }

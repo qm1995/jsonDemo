@@ -4,6 +4,7 @@ import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.text.BreakIterator;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
@@ -32,34 +33,23 @@ public class ConverterUtil {
 
     /**
      * 根据clazz获取合适的转换器
+     *
      * @param clazz
      * @return
      */
     public static Converter getConverter(Class<?> clazz) {
-        Converter converter = null;
-        if (isNumberType(clazz)) {
-            converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Number.class);
-        } else if (isBooleanType(clazz)) {
-            converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Boolean.class);
-        } else if (isBeanType(clazz)) {
-            converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Object.class);
-        } else if (isCollectionType(clazz)) {
-            converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Collection.class);
-        } else if (isStringType(clazz)) {
-            converter = DEFAULT_REGISTER_CONVERTER_MAP.get(String.class);
-        } else if (isMapType(clazz)) {
-            converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Map.class);
-        } else if (isDateType(clazz)){
-            converter = DEFAULT_REGISTER_CONVERTER_MAP.get(Date.class);
+        for (Map.Entry<Class<?>, Converter> convert : DEFAULT_REGISTER_CONVERTER_MAP.entrySet()) {
+            Converter value = convert.getValue();
+            if (value.support(clazz)) {
+                return value;
+            }
         }
-        if (converter == null) {
-            throw new RuntimeException("unSupport the " + clazz.getName() + " type converter");
-        }
-        return converter;
+        throw new RuntimeException("unSupport the " + clazz.getName() + " type converter");
     }
 
     /**
      * 是否为数值类型
+     *
      * @param tClass
      * @return
      */
@@ -78,6 +68,7 @@ public class ConverterUtil {
 
     /**
      * 是否为boolean类型
+     *
      * @param tClass
      * @return
      */
@@ -90,6 +81,7 @@ public class ConverterUtil {
 
     /**
      * 是否为string 类型
+     *
      * @param tClass
      * @return
      */
@@ -102,6 +94,7 @@ public class ConverterUtil {
 
     /**
      * 是否为集合类型
+     *
      * @param tClass
      * @return
      */
@@ -130,8 +123,8 @@ public class ConverterUtil {
         Field[] declaredFields = tClass.getDeclaredFields();
         for (Field field : declaredFields) {
             try {
-                PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(),tClass);
-                if (descriptor.getWriteMethod() != null && descriptor.getReadMethod() != null){
+                PropertyDescriptor descriptor = new PropertyDescriptor(field.getName(), tClass);
+                if (descriptor.getWriteMethod() != null && descriptor.getReadMethod() != null) {
                     return true;
                 }
             } catch (IntrospectionException e) {
@@ -143,6 +136,7 @@ public class ConverterUtil {
 
     /**
      * 是否为Map接口的实现类/子接口
+     *
      * @param tClass
      * @return
      */
@@ -150,19 +144,45 @@ public class ConverterUtil {
         if (tClass == null) {
             return false;
         }
-       return Map.class.isAssignableFrom(tClass);
+        return Map.class.isAssignableFrom(tClass);
     }
 
 
     /**
      * 是否为日期类型
+     *
      * @param tClass
      * @return
      */
-    public static boolean isDateType(Class<?> tClass){
-        if (tClass == null){
+    public static boolean isDateType(Class<?> tClass) {
+        if (tClass == null) {
             return false;
         }
         return Date.class.isAssignableFrom(tClass);
+    }
+
+    /**
+     * 添加转换器，
+     * @param clazz
+     * @param converter
+     * @param isCover 是否覆盖已存在的
+     * @return
+     */
+    public static boolean addConverter(Class<?> clazz,Converter converter,boolean isCover){
+        if (!isCover && DEFAULT_REGISTER_CONVERTER_MAP.containsKey(clazz)){
+            return false;
+        }
+        DEFAULT_REGISTER_CONVERTER_MAP.put(clazz,converter);
+        return true;
+    }
+
+    /**
+     * 以不覆盖的形式添加转换器
+     * @param clazz
+     * @param converter
+     * @return
+     */
+    public static boolean addConverter(Class<?> clazz,Converter converter){
+        return addConverter(clazz, converter,false);
     }
 }

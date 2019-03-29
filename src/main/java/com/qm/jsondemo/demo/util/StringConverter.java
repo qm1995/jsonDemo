@@ -16,4 +16,9 @@ public class StringConverter implements Converter{
         }
         throw new ClassCastException(clazz.getTypeName() + "can not cast String type!");
     }
+
+    @Override
+    public boolean support(Class<?> clazz) {
+        return ConverterUtil.isStringType(clazz);
+    }
 }

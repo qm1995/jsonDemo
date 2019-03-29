@@ -16,4 +16,11 @@ public interface Converter {
      * @return
      */
     Object convert(Type clazz, Object value);
+
+    /**
+     * 是否支持此种类型转换
+     * @param clazz
+     * @return
+     */
+    boolean support(Class<?> clazz);
 }
