@@ -75,7 +75,12 @@ public class RequestJsonHandler implements HandlerMethodArgumentResolver {
      */
     private Object dealWithArray(List<Map<String,String>> list,RequestJson requestJson,MethodParameter methodParameter){
         Class<?> parameterType = methodParameter.getParameterType();
-        return ConverterUtil.getConverter(parameterType).convert(methodParameter.getGenericParameterType(),JsonUtil.convertBeanToStr(list));
+        Converter converter = ConverterUtil.getConverter(parameterType);
+        if (converter instanceof DateConverter && !"".equals(requestJson.datePattern())){
+            DateConverter dateConverter = (DateConverter) converter;
+            dateConverter.setDatePattern(requestJson.datePattern());
+        }
+        return converter.convert(methodParameter.getGenericParameterType(),JsonUtil.convertBeanToStr(list));
     }
     /**
      * 处理{"":""}第一层json结构为map结构的json串，
