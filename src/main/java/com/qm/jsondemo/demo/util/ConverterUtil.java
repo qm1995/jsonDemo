@@ -23,7 +23,7 @@ public class ConverterUtil {
 
     static {
         DEFAULT_REGISTER_CONVERTER_MAP.put(Number.class, new NumberConverter());
-        DEFAULT_REGISTER_CONVERTER_MAP.put(Boolean.class, new NumberConverter());
+        DEFAULT_REGISTER_CONVERTER_MAP.put(Boolean.class, new BooleanConverter());
         DEFAULT_REGISTER_CONVERTER_MAP.put(String.class, new StringConverter());
         DEFAULT_REGISTER_CONVERTER_MAP.put(Object.class, new BeanConverter());
         DEFAULT_REGISTER_CONVERTER_MAP.put(Collection.class, new CollectionConverter());
