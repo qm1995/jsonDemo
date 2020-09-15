@@ -43,7 +43,6 @@ public class RequestJsonHandler implements HandlerMethodArgumentResolver {
             return null;
         }
         Object obj =  request.getAttribute(Constant.REQUEST_BODY_DATA_NAME);
-        synchronized (RequestJsonHandler.class) {
             if (obj == null) {
                 resolveRequestBody(request);
                 obj = request.getAttribute(Constant.REQUEST_BODY_DATA_NAME);
@@ -51,7 +50,6 @@ public class RequestJsonHandler implements HandlerMethodArgumentResolver {
                     return null;
                 }
             }
-        }
         RequestJson requestJson = methodParameter.getParameterAnnotation(RequestJson.class);
         if (obj instanceof Map){
             Map<String, String> map = (Map<String, String>)obj;
